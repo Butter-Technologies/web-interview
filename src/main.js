@@ -27,6 +27,9 @@ import '@/router/interceptor.router';
 // http
 import api from './request/api';
 import request from './request/request';
+import SelectEvent from './event/selectEvent';
+
+import './request/mock';
 
 Vue.config.productionTip = false;
 Vue.prototype.$api = api;
@@ -49,6 +52,10 @@ Vue.use(ElementUI, {
   size: 'small',
   i18n: (key, value) => i18n.t(key, value)
 });
+
+document.body.addEventListener('click',  (el) => {
+  SelectEvent.$emit('close', el);
+}, false)
 
 new Vue({
   router,

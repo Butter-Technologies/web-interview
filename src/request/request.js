@@ -5,9 +5,9 @@ import router from '../router';
 
 let BASEURL = '';
 if (process.env.NODE_ENV === 'dev') {
-  BASEURL = '/api/v1'; // 开发环境
+  BASEURL = ''; // 开发环境
 } else if (process.env.NODE_ENV === 'production') {
-  BASEURL = 'http://116.236.59.98:8019/api/v1'; // 生产环境
+  BASEURL = 'http://116.236.59.98:8019/'; // 生产环境
 }
 import {Message} from 'element-ui';
 
@@ -81,7 +81,7 @@ const request = (
       [params]: data
     })
       .then(res => {
-        resolve(res.data.data);
+        resolve(res.data);
       })
       .catch(e => {
         reject(e);
