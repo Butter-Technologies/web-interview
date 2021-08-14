@@ -11,6 +11,130 @@
 - 本题主要考察工程师对整个设计图的划分能力和抽象能力，以及工程文档的文字表述能力。
 
 #### 答题区域
+
+### 概述
+
+- 页面包含基础组件：inputText, inputnumber，dateTime, select, table, button, tag,  布局组件(row, col)
+- 复合组件：form, formItem
+- 复杂组件：
+  - 上方第一个区域是个表单提供的用户输入并保存订单
+  - 第二个区域是一个Table表头和表身固定化，有选择输入
+
+#### 上方业务表单
+
+基础组件存在的前提下。
+表单展示中一排5列共两行
+每个item中包含的是label和第二排DIV的内容（text，input，dateTime）  
+
+布局上可以使用flex布局让item宽度`x%` flex属性设置`flex-wrap`换行形式这样我们只需要定义每行个数就能控制行数
+
+我们可以定义一个JSON表示表单的情况，当然也可以通过组件包含的形式拆分组件并暴露自定义部分
+```json
+{
+  "col": 5,
+  "formItem": [
+    {
+      "label": "Vandor",
+      "nextLabel": "VandorA",
+      "type": "text",
+      "prop": null,
+      "key": "vandorId"
+    },
+    ...
+    {
+      "label": "Terms",
+      "type": "select",
+      "key": "terms",
+      "prop": {
+        "required": "true",
+        "message": "Please select Terms",
+        "rule": Function:Boolean
+      },
+      "options": Promise:Array
+    },
+    ...
+  ],
+  "buttons": [
+    {
+      "label": "Cancel",
+      "type": "default",
+      "event": null,
+    },
+    {
+      "label": "Save",
+      "type": "primary",
+      "event": Function:void,
+    }
+  ]
+}
+```  
+
+然后在定义一个fromData表示初始值
+```json
+{
+  "vandorId": "ID# 123-456",
+  ...
+  "terms": 0,
+  ...
+}
+```  
+根据结构的json渲染每个表单组件内容需要远程请求的选项通过返回一个Promise进行设置
+
+组件提供
+- `@change`事件订阅，
+- `@submit`用户点击btn类型是`primary`的按钮的回调事件获取form的值返回结构化的`formData`
+- `getForm`函数方便调用子组件调用获取表单数据
+
+#### Table
+
+基础组件存在的前提下。
+表格可编辑和获取表格结构化数据用于保存
+表格的每一行拥有一个合计VueWatch的方式进行计算和显示
+表格底部拥有一个合计可以使用VueWatch的方式进行计算和显示
+表身第一列删除按钮是删除一行的可以做固定化通过组件暴露一个属性来设置这部分的显示和隐藏
+
+表格格式化定义数据来定义表头和表身的内容
+```json
+[{
+  "label": "SKU",
+  "type": "text"
+},
+{
+  "label": "Product",
+  "type": "select",
+  "options": Promise:Array
+},
+{
+  "label": "Oridered",
+  "type": "textWithSelect",
+  "options": Promise:Array
+},
+...
+{
+  "label": "LOT#",
+  "type": "tag",
+  "options": Promise:Array
+}]
+``` 
+
+表格数据使用keyValue的方式进行定义
+```json
+{
+  "SKU": "007",
+  "Product": "Crob",
+  "OrderedNubmer": "20",
+  "OrderedType": "lib",
+  ...
+}
+```
+
+组件提供
+- `@onPush`添加一行后的事件回调
+- `@onDelete`删除一行后的事件回调
+- `push`函数方便添加一行
+- `delete`函数方便删除某一行
+- `getData`函数方便调用子组件调用获取表单数据
+
  --- 
 
 ### 2. 代码实现
