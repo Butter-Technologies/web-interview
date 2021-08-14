@@ -1,0 +1,15 @@
+module.exports = {
+  semi: true,
+  singleQuote: true,
+  bracketSpacing: false,
+  arrowParens: 'avoid',
+  endOfLine: 'auto',
+  tabWidth: 2,
+  quoteProps: 'as-needed',
+  trailingComma: 'none',
+  rangeStart: 0,
+  rangeEnd: Infinity,
+  requirePragma: false,
+  insertPragma: false,
+  proseWrap: 'preserve',
+}
